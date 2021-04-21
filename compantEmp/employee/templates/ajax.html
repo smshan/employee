@@ -1,0 +1,129 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#btnsave").click(function() {
+            console.log("Save Button Clicked");
+            output = "";
+            let empid = $("#empid").val();
+            let nm = $("#nameid").val();
+            let em = $("#emailid").val();
+            let sk = $("#skillid").val();
+            let rl = $("#rollid").val();
+            let csr = $("input[name=csrfmiddlewaretoken").val();
+            if (nm == "") {
+                console.log("plese Enter Name");
+            } else if (em == "") {
+                console.log("please Enter Email");
+            } else if (sk == "") {
+                console.log("plese Enter Your Skills");
+            } else if (rl == "") {
+                console.log("plese Enter Your Roll");
+            } else {
+                mydata = {
+                    empid: empid,
+                    name: nm,
+                    email: em,
+                    skill: sk,
+                    roll: rl,
+                    csrfmiddlewaretoken: csr
+                };
+                $.ajax({
+                    url: "{% url 'save_data' %}",
+                    method: "POST",
+                    data: mydata,
+                    dataType: "json",
+                    success: function(data) {
+                        //console.log(data);
+                        x = data.employee_data
+                        if (data.status == "save") {
+                            console.log("Form Submitted successfully");
+                            for (i = 0; i < x.length; i++) {
+                                output += "<tr><td>" +
+                                    x[i].id +
+                                    "</td><td>" +
+                                    x[i].name +
+                                    "</td><td>" +
+                                    x[i].email +
+                                    "</td><td>" +
+                                    x[i].skill +
+                                    "</td><td>" +
+                                    x[i].roll +
+                                    "</td><td> <input type='button' class='btn btn-warning btn-sm btn-edit' value='Edit' data-sid=" +
+                                    x[i].id +
+                                    " />  <input type='button' class='btn btn-danger btn-sm btn-del' value='Delete' data-sid=" +
+                                    x[i].id +
+                                    "/>";
+
+                            }
+                            $("#tbody").html(output);
+                            $("form")[0].reset();
+                        }
+                        if (data.status == 0) {
+                            console.log("Unable to save")
+                        }
+                    },
+                });
+            }
+        });
+    });
+
+    //delete data
+    $(document).ready(function() {
+        $("#tbody").on("click", ".btn-del", function() {
+            console.log("Delete Button Clicked");
+            let id = $(this).attr("data-sid");
+            let csr = $("input[name=csrfmiddlewaretoken").val();
+            console.log(id);
+            mydata = {
+                sid: id,
+                csrfmiddlewaretoken: csr
+            };
+            mythis = this;
+            $.ajax({
+                url: "{% url 'delete_data' %}",
+                method: "POST",
+                data: mydata,
+                success: function(data) {
+                    // console.log(data);
+                    if (data.status == 1) {
+                        console.log("Data Deleted Successfully");
+                        $(mythis).closest("tr").fadeOut();
+                    }
+                    if (data.status == 0) {
+                        console.log("Unable to Deleted Data");
+                    }
+                },
+            });
+
+        });
+    });
+
+    //edit data
+
+    $(document).ready(function() {
+        $("#tbody").on("click", ".btn-edit", function() {
+            console.log("Edit Button Clicked");
+            let id = $(this).attr("data-sid");
+            let csr = $("input[name=csrfmiddlewaretoken").val();
+            console.log(id);
+            mydata = {
+                sid: id,
+                csrfmiddlewaretoken: csr
+            };
+            $.ajax({
+                url: "{% url 'Edit_data' %}",
+                method: "POST",
+                data: mydata,
+                dataType: "json",
+                success: function(data) {
+                    // console.log(data);
+                    $("#empid").val(data.id);
+                    $("#nameid").val(data.name);
+                    $("#emailid").val(data.email);
+                    $("#skillid").val(data.skill);
+                    $("#rollid").val(data.roll);
+                },
+            });
+
+        });
+    });
+</script>

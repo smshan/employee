@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from  employee import views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns 
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',views.addemployee,name='addemployee'),
+    path('save_data/',views.save_data,name='save_data'),
+    path('delete_data/',views.delete_data,name='delete_data'),
+    path('Edit_data/',views.Edit_data,name='Edit_data'),
 ]
+
+
+urlpatterns+=staticfiles_urlpatterns()
