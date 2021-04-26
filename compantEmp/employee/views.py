@@ -6,12 +6,13 @@ from .forms import EmployeeRegistration
 from .models import employee,skills
 # Create your views here.
 def addemployee(request):
-    skill = skills.objects.all()
+    sk=skills.objects.all()
     emp = employee.objects.all()
     fm = EmployeeRegistration()
-    return render(request,'index.html',{'form':fm,'em': emp,'sk':skill})
+    return render(request,'index.html',{'form':fm,'em': emp,'skill':sk})
 #@csrf_exempt
 def save_data(request):
+    
     form= EmployeeRegistration(request.POST)
     if request.method=="POST":
         if form.is_valid():
@@ -21,7 +22,7 @@ def save_data(request):
             skill = request.POST['skill']
             roll = request.POST['roll']
             if(empid == ''):
-                usr = employee(id=empid,name=name,email=email,skill=skill,roll=roll)
+                usr = employee(name=name,email=email,skill=skill,roll=roll)
             else:
                 usr = employee(id=empid,name=name,email=email,skill=skill,roll=roll)
             usr.save()
@@ -35,9 +36,9 @@ def save_data(request):
 #delete data
 def delete_data(request):
     if request.method == "POST":
-        iD = request.POST.get('sid')
+        id = request.POST.get('sid')
         #print(id)
-        pi = employee.objects.get(id=id)
+        pi = employee.objects.get(pk=id)
         pi.delete()
         return JsonResponse({'status':1})
     else:
@@ -48,8 +49,9 @@ def Edit_data(request):
     if request.method == "POST":
         id = request.POST.get('sid')
         print(id)
+        skill=skills.objects.get(pk=id)
         emp = employee.objects.get(pk=id)
-        emp_data ={"id":emp.id,"name":emp.name,"email":emp.email,"skill":emp.skill,"roll":emp.roll}
+        emp_data ={"id":emp.id,"name":emp.name,"email":emp.email,"skill":skill.skill,"roll":emp.roll}
         return JsonResponse(emp_data)
            
            

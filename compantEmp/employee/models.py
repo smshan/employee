@@ -7,9 +7,9 @@ from django.core import validators
 class skills(models.Model):
    
     skill=models.CharField(max_length=50)
-    
-    class Meta:
-         db_table = "skill"
+
+    def __str__(self):
+        return self.skill 
 
 
 class employee(models.Model):
@@ -22,17 +22,19 @@ class employee(models.Model):
     email=models.CharField(max_length=90)
     skill=models.ManyToManyField(skills)
     roll=models.CharField(max_length=1,choices=Roll)
-    class Meta:
-         db_table = "employee"  
-
- 
-
-
+    def __str__(self):
+        return self.name
+        return self.email
+        return self.skill
+        return self.roll
    
 
+ 
 class team(models.Model):
     team_name=models.CharField(max_length=50)
     team_leader_id=models.ForeignKey(employee,  on_delete=models.CASCADE)
-    class Meta:
-         db_table = "team"
+    def __str__(self):
+        return self.team_name
+        return self.team_leader_id
+ 
 
