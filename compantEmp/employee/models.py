@@ -7,6 +7,9 @@ from django.core import validators
 class skills(models.Model):
    
     skill=models.CharField(max_length=50)
+    def __unicode__(self):
+        return self.skill
+ 
 
     def __str__(self):
         return self.skill 
@@ -27,7 +30,7 @@ class employee(models.Model):
         return self.email
         return self.skill
         return self.roll
-   
+    
 
  
 class team(models.Model):

@@ -20,14 +20,17 @@
 
     <div class="container mt-5">
         <h2 class="text-center alter alter-danger"> Employee Delatils </h2>
+
         <div class="row">
             <div class="col-sm-4">
                 <h4 class="text-center alert alert-info">Add New Employee</h4>
-                <form action="" method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+                <form action="" method="POST" class="post-form" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <input type="hidden" name="empid" id="empid" /> {{form.as_p}}
 
                     <input type="button" class="btn btn-success" id="btnsave" value="save" />
                 </form>
+
             </div>
             <div class="col-sm-7">
                 <h4 class="text-center alert alert-info">Show Employee Details</h4>
@@ -42,18 +45,14 @@
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    {% for e in em %}
                     <tbody id="tbody">
-
-
+                        {% for e in em %}
                         <tr>
                             <td>{{e.id}}</td>
                             <td>{{e.name}}</td>
                             <td>{{e.email}}</td>
-
-                            <td>{{ e.skill }}</td>
-
-
+                            {%for skill in e.skill.all %}
+                            <td>{{ skill }}</td>{% endfor %}
                             <td>{{e.roll}}</td>
                             <td>
                                 <input type="button" data-sid="{{e.id}}" class="btn btn-warning btn-sm btn-edit" value="Edit" />

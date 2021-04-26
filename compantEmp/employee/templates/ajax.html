@@ -6,7 +6,7 @@
             let empid = $("#empid").val();
             let nm = $("#nameid").val();
             let em = $("#emailid").val();
-            let sk = $("#skillid").val();
+            let sk = $("#id_skill").val();
             let rl = $("#rollid").val();
             let csr = $("input[name=csrfmiddlewaretoken").val();
             if (nm == "") {
@@ -17,54 +17,61 @@
                 console.log("plese Enter Your Skills");
             } else if (rl == "") {
                 console.log("plese Enter Your Roll");
-            } else {
-                mydata = {
-                    empid: empid,
-                    name: nm,
-                    email: em,
-                    skill: sk,
-                    roll: rl,
-                    csrfmiddlewaretoken: csr
-                };
-                $.ajax({
-                    url: "{% url 'save_data' %}",
-                    method: "POST",
-                    data: mydata,
-                    dataType: "json",
-                    success: function(data) {
-                        //console.log(data);
-                        x = data.employee_data
-                        if (data.status == "save") {
-                            console.log("Form Submitted successfully");
-                            for (i = 0; i < x.length; i++) {
-                                output += "<tr><td>" +
-                                    x[i].id +
-                                    "</td><td>" +
-                                    x[i].name +
-                                    "</td><td>" +
-                                    x[i].email +
-                                    "</td><td>" +
-                                    x[i].skill +
-                                    "</td><td>" +
-                                    x[i].roll +
-                                    "</td><td> <input type='button' class='btn btn-warning btn-sm btn-edit' value='Edit' data-sid=" +
-                                    x[i].id +
-                                    " />  <input type='button' class='btn btn-danger btn-sm btn-del' value='Delete' data-sid=" +
-                                    x[i].id +
-                                    "/>";
+            } // else // {
+            //   mydata = {
+            //    'empid': empid,
+            // 'name': nm,
+            //    'email': em,
+            //   'program': sk,
+            //    'roll': rl,
+            //    'csrfmiddlewaretoken': csr
+            // };
+            mydata = $("form").serialize()
 
-                            }
-                            $("#tbody").html(output);
-                            $("form")[0].reset();
+            //mydata["skill"] = sk;
+            //mydata["csrfmiddlewaretoken"] = csr;
+            //  console.log(mydata)
+            //  return
+            console.log(mydata)
+            $.ajax({
+                url: "{% url 'save_data' %}",
+                method: "POST",
+                data: mydata,
+                dataType: "json",
+                success: function(data) {
+                    //console.log(data);
+                    x = data.employee_data
+                    if (data.status == "save") {
+                        console.log("Form Submitted successfully");
+                        for (i = 0; i < x.length; i++) {
+                            output += "<tr><td>" +
+                                x[i].id +
+                                "</td><td>" +
+                                x[i].name +
+                                "</td><td>" +
+                                x[i].email +
+                                "</td><td>" +
+                                x[i].skill +
+                                "</td><td>" +
+                                x[i].roll +
+                                "</td><td> <input type='button' class='btn btn-warning btn-sm btn-edit' value='Edit' data-sid=" +
+                                x[i].id +
+                                " />  <input type='button' class='btn btn-danger btn-sm btn-del' value='Delete' data-sid=" +
+                                x[i].id +
+                                "/>";
+
                         }
-                        if (data.status == 0) {
-                            console.log("Unable to save")
-                        }
-                    },
-                });
-            }
+                        $("#tbody").html(output);
+                        $("form")[0].reset();
+                    }
+                    if (data.status == 0) {
+                        console.log("Unable to save")
+                    }
+                },
+            });
         });
     });
+
 
     //delete data
     $(document).ready(function() {

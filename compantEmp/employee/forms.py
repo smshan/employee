@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from django import forms
 from employee.models import employee,skills
 
+
 class EmployeeRegistration(forms.ModelForm):
        class Meta:
                  model = employee
@@ -10,6 +11,9 @@ class EmployeeRegistration(forms.ModelForm):
                  widgets = {
                      'name':forms.TextInput(attrs={'class':'form-control', 'id':'nameid'}),
                      'email':forms.EmailInput(attrs={'class':'form-control','id':'emailid'}),
-                     'skill':forms.SelectMultiple(attrs={'id':'skillid'}),
+                   #  'skill':forms.SelectMultiple(attrs={'class':'form-select', 'id':'skillid'}),
                      'roll':forms.Select(attrs={'class':'form-select', 'id':'rollid'})
                  }
+
+
+

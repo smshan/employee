@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'compantEmp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'employee',
+        'NAME':'emp',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'localhost',
