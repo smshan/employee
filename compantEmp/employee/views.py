@@ -13,29 +13,26 @@ def addemployee(request):
     return render(request,'index.html',{'form':fm,'em': emp,'sk':skill})
 #@csrf_exempt
 def save_data(request):
-    print(request.POST)
+    skill=skills.objects.all()
     form= EmployeeRegistration(request.POST)
     if request.method=="POST":
-        
         if form.is_valid():
             empid= request.POST.get('empid')
             name= request.POST['name']
             email = request.POST['email']
-            skill = request.POST['skill']
+            skill = request.GET.get('skill')
             roll = request.POST['roll']
             if(empid == ''):
-                usr = employee(name=name,email=email,skill=skill,roll=roll)
+                usr = employee.objects.all()
             else:
-                usr = employee(id=empid,name=name,email=email,skill=skill,roll=roll)
+                usr = employee.objects.all()
             usr.save()
             emp = employee.objects.values()
             print(emp)
             employee_data = list(emp)
             return JsonResponse({'status' : 'save' ,'employee_data': employee_data})
         else:
-            print(form.errors)
             return JsonResponse({'status' : 0})
-           
 #delete data
 def delete_data(request):
     if request.method == "POST":
@@ -52,9 +49,7 @@ def Edit_data(request):
     if request.method == "POST":
         id = request.POST.get('sid')
         print(id)
-        skill=skills.objects.get(pk=id)
         emp = employee.objects.get(pk=id)
-        emp_data ={"id":emp.id,"name":emp.name,"email":emp.email,"skill":skill.skill,"roll":emp.roll}
+        emp_data ={"id":emp.id,"name":emp.name,"email":emp.email,"skill":emp.skill,"roll":emp.roll}
         return JsonResponse(emp_data)
-           
            
