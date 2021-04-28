@@ -23,9 +23,9 @@ def save_data(request):
             skill = request.GET.get('skill')
             roll = request.POST['roll']
             if(empid == ''):
-                usr = employee.objects.all()
+                usr = employee(name=name,email=email,skill=skill,roll=roll)
             else:
-                usr = employee.objects.all()
+                usr = employee(id=id,name=name,email=email,skill=skill,roll=roll)
             usr.save()
             emp = employee.objects.values()
             print(emp)
