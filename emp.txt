@@ -1,0 +1,33 @@
+from empdetails.models  import skill,employee
+>>> s1=skill(skill="python")
+>>> s1.save()
+>>> s2=skill(skill="jave")
+>>> s2.save()
+>>> e1=employee(name="shahanas",email="smshan065@gmail.com",roll="Developer")
+>>> e1.save()
+>>> e1.skill.add(s1)
+>>> e1.skill.all()
+<QuerySet [<skill: python>]>
+>>> employee.objects.filter(skill__id=1)
+<QuerySet [<employee: shahanas>, <employee: sharu>]>
+>>> employee.objects.filter(skill__pk=1)
+<QuerySet [<employee: shahanas>, <employee: sharu>]>
+>>> employee.objects.filter(skill=1)
+<QuerySet [<employee: shahanas>, <employee: sharu>]>
+>>> employee.objects.filter(skill=s1)
+<QuerySet [<employee: shahanas>]>
+>>> employee.objects.filter(skill=s1,s2)
+  File "<console>", line 1
+SyntaxError: positional argument follows keyword argument
+>>> a=employee.objects.all()
+>>> print(a)
+<QuerySet [<employee: shahanas>, <employee: sharu>, <employee: shahanas>]>
+>>> s1.employee_set.all()
+<QuerySet [<employee: shahanas>]>
+>>> s2.employee.set.all()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'skill' object has no attribute 'employee'
+>>> s2.employee_set.all()
+<QuerySet []>
+>>>

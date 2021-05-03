@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.core import validators
 from django.template.response   import TemplateResponse
+import simplejson as json
 from django.http import JsonResponse
+
 #from django.views.decorators.csrf import csrf_exempt
 from .forms import EmployeeRegistration
 from .models import employee,skills
@@ -13,26 +15,24 @@ def addemployee(request):
     return render(request,'index.html',{'form':fm,'em': emp,'sk':skill})
 #@csrf_exempt
 def save_data(request):
-    skill=skills.objects.all()
+    
     form= EmployeeRegistration(request.POST)
     if request.method=="POST":
-        if form.is_valid():
-            empid= request.POST.get('empid')
-            name= request.POST['name']
-            email = request.POST['email']
-            skill = request.GET.get('skill')
-            roll = request.POST['roll']
-            if(empid == ''):
-                usr = employee(name=name,email=email,skill=skill,roll=roll)
-            else:
-                usr = employee(id=id,name=name,email=email,skill=skill,roll=roll)
-            usr.save()
-            emp = employee.objects.values()
-            print(emp)
-            employee_data = list(emp)
-            return JsonResponse({'status' : 'save' ,'employee_data': employee_data})
-        else:
-            return JsonResponse({'status' : 0})
+        name= request.POST['name']
+        skillid=request.POST['skill']
+        email = request.POST['email']
+        roll = request.POST['roll']
+        print(request.POST)
+     #
+        usr = employee(name=name,email=email,roll=roll)
+        usr.save()
+
+        for skill in skillid:
+           usr.skill.add(skills.objects.get(id=skill))
+        return json.dumps({'status' : 'save','usr':usr })
+    else:     
+        print(request.POST) 
+        return JsonResponse({'status' : 0})
 #delete data
 def delete_data(request):
     if request.method == "POST":
@@ -46,10 +46,15 @@ def delete_data(request):
            
 #edit data
 def Edit_data(request):
+  
     if request.method == "POST":
+        
         id = request.POST.get('sid')
+
         print(id)
         emp = employee.objects.get(pk=id)
+       
         emp_data ={"id":emp.id,"name":emp.name,"email":emp.email,"skill":emp.skill,"roll":emp.roll}
-        return JsonResponse(emp_data)
+       
+        return Json.dumps(emp_data)
            

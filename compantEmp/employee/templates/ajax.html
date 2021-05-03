@@ -37,7 +37,7 @@
                 url: "{% url 'save_data' %}",
                 method: "POST",
                 data: mydata,
-                dataType: "json",
+                dataType: "Json",
                 success: function(data) {
                     //console.log(data);
                     x = data.employee_data
@@ -122,11 +122,11 @@
                 data: mydata,
                 dataType: "json",
                 success: function(data) {
-                    // console.log(data);
+                    console.log(data);
                     $("#empid").val(data.id);
                     $("#nameid").val(data.name);
                     $("#emailid").val(data.email);
-                    $("#skillid").val(data.skill);
+                    $("#id_skill").val(data.skill);
                     $("#rollid").val(data.roll);
                 },
             });
